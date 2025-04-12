@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '${APP_PORT}:${APP_PORT}'
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - DATABASE_URL=${DATABASE_URL}
+      - APP_PORT=${APP_PORT}
+    volumes:
+      - .:/app
+      - /app/node_modules
+    depends_on:
+      - db
+    command: sh -c "yarn && yarn start:dev"
+
+  db:
+    image: postgres:13-alpine
+    environment:
+      - POSTGRES_USER=localhost
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=postgres
+    ports:
+      - '${POSTGRES_PORT}:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
