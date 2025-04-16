@@ -15,19 +15,27 @@ services:
       - .:/app
       - /app/node_modules
     depends_on:
-      - db
-    command: sh -c "yarn && yarn start:dev"
+      db:
+        condition: service_healthy
+    command: sh -c "yarn && yarn prisma generate && yarn prisma migrate deploy && yarn start:swc"
+    restart: unless-stopped
 
   db:
     image: postgres:13-alpine
     environment:
-      - POSTGRES_USER=localhost
-      - POSTGRES_PASSWORD=root
-      - POSTGRES_DB=postgres
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
     ports:
       - '${POSTGRES_PORT}:5432'
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres'] # Alterado para usar postgres
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
 
 volumes:
   postgres_data:
