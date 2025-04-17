@@ -1,5 +1,3 @@
-import { randomUUID } from 'crypto';
-
 export type UserProps = {
   name: string;
   surname: string;
@@ -8,17 +6,17 @@ export type UserProps = {
 };
 
 export class User {
-  public readonly id: string;
+  public readonly id: number;
   public props: Required<UserProps>;
 
-  private constructor(props: UserProps, id?: string) {
-    this.id = id || randomUUID();
+  private constructor(props: UserProps, id?: number) {
+    this.id = id || new Date().getTime();
     this.props = {
       ...props,
     };
   }
 
-  static create(props: UserProps, id?: string): User {
+  static create(props: UserProps, id?: number): User {
     return new User(props, id);
   }
 
