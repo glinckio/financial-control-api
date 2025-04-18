@@ -1,3 +1,7 @@
-import { User } from '@prisma/client';
-
-export type UserModel = User;
+export class UserModel {
+  id: number;
+  name: string;
+  surname: string;
+  email: string;
+  password: string;
+}

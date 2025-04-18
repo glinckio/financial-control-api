@@ -10,7 +10,7 @@
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:swc": "nest start -b swc",
-    "start:dev": "dotenv -e .env.local -- nest start --watch",
+    "start:dev": "dotenv -e .env -- nest start --watch",
     "start:docker": "dotenv -e .env -- nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
@@ -23,9 +23,9 @@
     "up": "docker-compose down && docker-compose build --no-cache && docker-compose up -d"
   },
   "dependencies": {
-    "@nestjs/common": "^11.0.1",
+    "@nestjs/common": "^11.0.20",
     "@nestjs/config": "^4.0.2",
-    "@nestjs/core": "^11.0.1",
+    "@nestjs/core": "^11.0.20",
     "@nestjs/platform-express": "^11.0.1",
     "@nestjs/swagger": "^11.1.2",
     "@nestjs/throttler": "^6.4.0",
@@ -39,7 +39,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
     "@eslint/js": "^9.18.0",
-    "@nestjs/cli": "^11.0.0",
+    "@nestjs/cli": "^11.0.6",
     "@nestjs/schematics": "^11.0.0",
     "@nestjs/testing": "^11.0.1",
     "@swc/cli": "^0.6.0",

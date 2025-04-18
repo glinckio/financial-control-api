@@ -8,6 +8,7 @@ import { ThrottlerModule, ThrottlerModuleOptions } from '@nestjs/throttler';
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
+      cache: true,
     }),
     DatabaseModule,
     ThrottlerModule.forRootAsync({
