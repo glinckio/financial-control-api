@@ -127,6 +127,24 @@ exports.Prisma.UserScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.InvoiceScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  emited: 'emited',
+  endDate: 'endDate',
+  total: 'total',
+  portions: 'portions'
+};
+
+exports.Prisma.BillScalarFieldEnum = {
+  id: 'id',
+  description: 'description',
+  amount: 'amount',
+  portion: 'portion',
+  purchasedDate: 'purchasedDate',
+  invoiceId: 'invoiceId'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -139,7 +157,9 @@ exports.Prisma.QueryMode = {
 
 
 exports.Prisma.ModelName = {
-  User: 'User'
+  User: 'User',
+  Invoice: 'Invoice',
+  Bill: 'Bill'
 };
 
 /**
