@@ -24,6 +24,15 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   validate(payload: JwtPayload): { userId: string; email: string } {
+    if (!payload) {
+      throw new UnauthorizedException('Invalid payload: payload is required');
+    }
+    if (!payload.sub) {
+      throw new UnauthorizedException('Invalid payload: sub is required');
+    }
+    if (!payload.email) {
+      throw new UnauthorizedException('Invalid payload: email is required');
+    }
     return { userId: payload.sub, email: payload.email };
   }
 }
