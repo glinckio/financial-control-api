@@ -6,6 +6,7 @@ import { LoggerService } from './common/services/logger.service';
 import { ConfigService } from '@nestjs/config';
 import helmet from 'helmet';
 import compression from 'compression';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 export const bootstrap = async () => {
   const app = await NestFactory.create(AppModule, {
@@ -24,6 +25,26 @@ export const bootstrap = async () => {
 
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalFilters(new HttpExceptionFilter());
+
+  // Swagger configuration - only in non-test environment
+  if (process.env.NODE_ENV !== 'test') {
+    const config = new DocumentBuilder()
+      .setTitle('Financial Control API')
+      .setDescription('The Financial Control API documentation')
+      .setVersion('1.0')
+      .addBearerAuth()
+      .addTag('auth', 'Authentication endpoints')
+      .addTag('users', 'User management endpoints')
+      .addTag('invoices', 'Invoice management endpoints')
+      .addTag('bills', 'Bill management endpoints')
+      .build();
+
+    const document = SwaggerModule.createDocument(app, config);
+    SwaggerModule.setup('api', app, document);
+    logger.log(
+      `Swagger documentation is available at: http://localhost:${port}/api`,
+    );
+  }
 
   await app.listen(port);
   logger.log(`Application is running on: http://localhost:${port}`);
