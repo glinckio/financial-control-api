@@ -47,7 +47,6 @@ describe('RolesGuard', () => {
       },
     };
 
-    // Create a mock context
     mockContext = {
       getHandler: () => jest.fn(),
       getClass: () => jest.fn(),
@@ -58,7 +57,6 @@ describe('RolesGuard', () => {
       }),
     };
 
-    // Reset the mock function
     mockGetAllAndOverride.mockReset();
     mockGetAllAndOverride.mockReturnValue(null);
   });

@@ -44,7 +44,6 @@ describe('LoggerService', () => {
 
     (createLogger as jest.Mock).mockReturnValue(mockLogger);
 
-    // Capture the printf template function
     (format.printf as jest.Mock).mockImplementation(
       (template: (info: LogInfo) => string) => {
         mockPrintfTemplate = template;

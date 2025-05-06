@@ -23,7 +23,6 @@ describe('Database Config', () => {
 
     const config = getDatabaseConfig(configService);
 
-    // Test basic configuration
     expect(config).toEqual(
       expect.objectContaining({
         type: 'postgres',
@@ -38,7 +37,6 @@ describe('Database Config', () => {
       }),
     );
 
-    // Test path patterns
     expect(config.entities).toBeDefined();
     expect(Array.isArray(config.entities)).toBe(true);
     const entities = config.entities as (

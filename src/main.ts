@@ -26,7 +26,6 @@ export const bootstrap = async () => {
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalFilters(new HttpExceptionFilter());
 
-  // Swagger configuration - only in non-test environment
   if (process.env.NODE_ENV !== 'test') {
     const config = new DocumentBuilder()
       .setTitle('Financial Control API')

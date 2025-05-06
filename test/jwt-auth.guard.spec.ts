@@ -36,13 +36,11 @@ describe('JwtAuthGuard', () => {
     reflector = new Reflector();
     guard = new JwtAuthGuard(reflector);
 
-    // Create a mock context
     mockContext = {
       getHandler: () => jest.fn(),
       getClass: () => jest.fn(),
     };
 
-    // Reset the mock functions
     mockParentCanActivate.mockReset();
     mockParentCanActivate.mockReturnValue(true);
     mockGetAllAndOverride.mockReset();
