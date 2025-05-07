@@ -16,6 +16,7 @@ jest.mock('@nestjs/core', () => ({
         if (service === LoggerService) {
           return { log: jest.fn() };
         }
+        return undefined;
       }),
       useLogger: jest.fn(),
       use: jest.fn(),

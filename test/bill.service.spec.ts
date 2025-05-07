@@ -72,6 +72,7 @@ describe('BillService', () => {
         invoiceId: '1',
         installmentNumber: 1,
         dueDate: new Date(),
+        value: 100,
       };
 
       const result = await service.create(createDto);
@@ -89,6 +90,7 @@ describe('BillService', () => {
         invoiceId: '1',
         installmentNumber: 4,
         dueDate: new Date(),
+        value: 100,
       };
 
       await expect(service.create(createDto)).rejects.toThrow(

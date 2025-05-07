@@ -77,15 +77,12 @@ describe('InvoiceService', () => {
       expect(mockBillService.create).toHaveBeenCalledTimes(3);
     });
 
-    it('should generate unique invoice numbers', () => {
-      const generateInvoiceNumber = (
-        service as { generateInvoiceNumber: () => string }
-      ).generateInvoiceNumber.bind(service);
+    it('should generate unique invoice numbers', async () => {
       const invoiceNumbers = new Set<string>();
       for (let i = 0; i < 100; i++) {
-        const number = generateInvoiceNumber();
-        expect(number).toMatch(/^INV-\d{6}-\d{4}$/);
-        invoiceNumbers.add(number);
+        const result = await service.create(createDto);
+        expect(result.number).toMatch(/^INV-\d{6}-\d{4}$/);
+        invoiceNumbers.add(result.number);
       }
       expect(invoiceNumbers.size).toBe(100);
     });
