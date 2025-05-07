@@ -2,11 +2,16 @@ name: Test Workflow
 
 on:
   pull_request:
-    branches: [develop]
+    branches:
+      - develop
 
 jobs:
   test:
+    name: Test Job
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Test Step
         run: echo "Testing GitHub Actions"

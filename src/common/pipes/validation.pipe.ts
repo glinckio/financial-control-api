@@ -5,7 +5,9 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { validate } from 'class-validator';
-import { plainToClass } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
+
+type Constructor = { new (...args: unknown[]): unknown };
 
 @Injectable()
 export class ValidationPipe implements PipeTransform<unknown> {
@@ -17,34 +19,18 @@ export class ValidationPipe implements PipeTransform<unknown> {
       return value;
     }
 
-    const object = plainToClass(metatype, value);
+    const object = plainToInstance(metatype, value);
     const errors = await validate(object);
 
     if (errors.length > 0) {
-      const messages = errors.map((error) => {
-        return {
-          property: error.property,
-          constraints: error.constraints,
-        };
-      });
-
-      throw new BadRequestException({
-        message: 'Validation failed',
-        errors: messages,
-      });
+      throw new BadRequestException('Validation failed');
     }
 
     return object;
   }
 
-  private toValidate(metatype: new (...args: unknown[]) => unknown): boolean {
-    const types: (new (...args: unknown[]) => unknown)[] = [
-      String,
-      Boolean,
-      Number,
-      Array,
-      Object,
-    ];
-    return !types.includes(metatype);
+  private toValidate(metatype: Constructor): boolean {
+    const types: Constructor[] = [String, Boolean, Number, Array, Object];
+    return !types.some((type) => metatype === type);
   }
 }

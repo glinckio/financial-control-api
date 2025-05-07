@@ -77,21 +77,26 @@ describe('ValidationPipe', () => {
   });
 
   it('should handle validation errors with proper format', async () => {
-    const value = { name: '', age: -1 };
+    const value = { name: 123 }; // Invalid type
     const metadata: ArgumentMetadata = {
       type: 'body',
-      metatype: TestDto,
+      metatype: Object,
       data: '',
     };
+
     try {
       await pipe.transform(value, metadata);
     } catch (error) {
       if (error instanceof BadRequestException) {
         const response = error.getResponse() as {
           message: string;
-          errors: any[];
+          statusCode: number;
+          error: string;
+          errors: unknown[];
         };
         expect(response).toHaveProperty('message', 'Validation failed');
+        expect(response).toHaveProperty('statusCode', 400);
+        expect(response).toHaveProperty('error', 'Bad Request');
         expect(response).toHaveProperty('errors');
         expect(Array.isArray(response.errors)).toBe(true);
       } else {

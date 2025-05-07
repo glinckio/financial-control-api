@@ -63,10 +63,10 @@ describe('JwtAuthGuard', () => {
     ]);
   });
 
-  it('should call parent canActivate when route is not public', () => {
+  it('should call parent canActivate when route is not public', async () => {
     mockGetAllAndOverride.mockReturnValue(false);
 
-    guard.canActivate(mockContext as ExecutionContext);
+    await guard.canActivate(mockContext as ExecutionContext);
 
     expect(mockParentCanActivate).toHaveBeenCalledWith(mockContext);
   });
@@ -118,20 +118,20 @@ describe('JwtAuthGuard', () => {
     );
   });
 
-  it('should handle parent canActivate returning false', () => {
+  it('should handle parent canActivate returning false', async () => {
     mockGetAllAndOverride.mockReturnValue(false);
     mockParentCanActivate.mockResolvedValue(false);
 
-    const result = guard.canActivate(mockContext as ExecutionContext);
+    const result = await guard.canActivate(mockContext as ExecutionContext);
 
     expect(result).toBe(false);
   });
 
-  it('should handle parent canActivate returning true', () => {
+  it('should handle parent canActivate returning true', async () => {
     mockGetAllAndOverride.mockReturnValue(false);
     mockParentCanActivate.mockResolvedValue(true);
 
-    const result = guard.canActivate(mockContext as ExecutionContext);
+    const result = await guard.canActivate(mockContext as ExecutionContext);
 
     expect(result).toBe(true);
   });

@@ -82,12 +82,21 @@ describe('InvoiceService', () => {
 
       const result = await service.create(createInvoiceDto);
       expect(result).toEqual(mockInvoice);
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(repository.create).toHaveBeenCalledWith({
         ...createInvoiceDto,
         number: expect.stringMatching(/^INV-\d{6}-\d{4}$/),
       });
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(repository.save).toHaveBeenCalled();
       expect(mockBillService.create).toHaveBeenCalledTimes(10);
+      expect(mockBillService.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          value: 100, // totalValue / numberOfBills
+          installmentNumber: expect.any(Number),
+          dueDate: expect.any(Date),
+        }),
+      );
     });
 
     it('should throw BadRequestException if numberOfBills is less than 1', async () => {
@@ -150,6 +159,7 @@ describe('InvoiceService', () => {
     it('should return an array of invoices', async () => {
       const result = await service.findAll();
       expect(result).toEqual([mockInvoice]);
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(repository.find).toHaveBeenCalledWith({
         relations: ['bills'],
       });
@@ -171,6 +181,7 @@ describe('InvoiceService', () => {
     it('should return a single invoice', async () => {
       const result = await service.findOne('1');
       expect(result).toEqual(mockInvoice);
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(repository.findOne).toHaveBeenCalledWith({
         where: { id: '1' },
         relations: ['bills'],
@@ -191,6 +202,7 @@ describe('InvoiceService', () => {
   describe('remove', () => {
     it('should remove an invoice', async () => {
       await service.remove('1');
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(repository.delete).toHaveBeenCalledWith('1');
     });
 

@@ -41,7 +41,7 @@ describe('Bootstrap', () => {
     };
 
     (NestFactory.create as jest.Mock).mockResolvedValue(mockApp);
-    (mockApp.get as jest.Mock).mockImplementation((token: any) => {
+    (mockApp.get as jest.Mock).mockImplementation((token: unknown) => {
       if (token === ConfigService) return mockConfigService;
       if (token === LoggerService) return mockLogger;
       return null;
@@ -50,7 +50,9 @@ describe('Bootstrap', () => {
 
   it('should bootstrap the application with correct configuration', async () => {
     const mainModule = await import('./main');
-    const bootstrap = mainModule.bootstrap;
+    const bootstrap = (
+      mainModule as unknown as { bootstrap: () => Promise<void> }
+    ).bootstrap;
 
     await bootstrap();
 

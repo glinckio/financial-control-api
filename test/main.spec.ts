@@ -35,7 +35,7 @@ describe('Bootstrap', () => {
   });
 
   it('should bootstrap the application with default port', async () => {
-    await bootstrap();
+    await (bootstrap as () => Promise<void>)();
 
     const mockApp = await Test.createTestingModule({
       imports: [AppModule],
@@ -77,7 +77,7 @@ describe('Bootstrap', () => {
       .spyOn(NestFactory, 'create')
       .mockResolvedValue(mockApp as unknown as INestApplication);
 
-    await bootstrap();
+    await (bootstrap as () => Promise<void>)();
 
     expect(mockConfigService.get('port')).toBe(4000);
     expect(mockApp.useLogger).toHaveBeenCalled();

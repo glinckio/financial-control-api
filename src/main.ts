@@ -8,7 +8,7 @@ import helmet from 'helmet';
 import compression from 'compression';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
-export const bootstrap = async () => {
+export async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     logger: false,
   });
@@ -47,6 +47,9 @@ export const bootstrap = async () => {
 
   await app.listen(port);
   logger.log(`Application is running on: http://localhost:${port}`);
-};
+}
 
-bootstrap();
+bootstrap().catch((error) => {
+  console.error('Error during bootstrap:', error);
+  process.exit(1);
+});

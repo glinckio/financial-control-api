@@ -10,8 +10,6 @@ import { RolesGuard } from './auth/guards/roles.guard';
 import { InvoiceModule } from './invoice/invoice.module';
 import { BillModule } from './bill/bill.module';
 import { AuthModule } from './auth/auth.module';
-import { CanActivate } from '@nestjs/common';
-import { Type } from '@nestjs/common';
 
 @Module({
   imports: [
@@ -34,7 +32,7 @@ import { Type } from '@nestjs/common';
     },
     {
       provide: APP_GUARD,
-      useClass: RolesGuard as Type<CanActivate>,
+      useClass: RolesGuard,
     },
   ],
 })

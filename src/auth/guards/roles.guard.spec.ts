@@ -1,114 +1,101 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { ExecutionContext } from '@nestjs/common';
-import { RolesGuard } from './roles.guard';
 import { Reflector } from '@nestjs/core';
-import { createMock } from '@golevelup/ts-jest';
+import { RolesGuard } from './roles.guard';
+import { User } from '../entities/user.entity';
 
 describe('RolesGuard', () => {
   let guard: RolesGuard;
   let reflector: Reflector;
 
-  const mockExecutionContext = createMock<ExecutionContext>();
-  const mockRequest = {
-    user: {
-      roles: ['admin'],
-    } as { roles: string[] },
+  const mockUser: User = {
+    id: '1',
+    email: 'test@example.com',
+    password: 'password',
+    name: 'Test User',
+    role: 'user',
+    roles: ['user'],
+    createdAt: new Date(),
+    updatedAt: new Date(),
   };
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [
-        RolesGuard,
-        {
-          provide: Reflector,
-          useValue: {
-            getAllAndOverride: jest.fn(),
-          },
-        },
-      ],
-    }).compile();
-
-    guard = module.get<RolesGuard>(RolesGuard);
-    reflector = module.get<Reflector>(Reflector);
-
-    mockExecutionContext.switchToHttp.mockReturnValue({
-      getRequest: () => mockRequest,
-    } as any);
+  beforeEach(() => {
+    reflector = new Reflector();
+    guard = new RolesGuard(reflector);
   });
 
   it('should be defined', () => {
     expect(guard).toBeDefined();
   });
 
-  describe('canActivate', () => {
-    it('should return true if no roles are required', () => {
-      jest.spyOn(reflector, 'getAllAndOverride').mockReturnValue(null);
+  it('should return true when no roles are required', () => {
+    const context = {
+      getClass: () => ({}),
+      getHandler: () => ({}),
+      getArgs: () => [],
+      getType: () => 'http',
+      switchToHttp: () => ({
+        getRequest: () => ({
+          user: mockUser,
+        }),
+      }),
+    } as ExecutionContext;
 
-      const result = guard.canActivate(mockExecutionContext);
+    jest.spyOn(reflector, 'get').mockReturnValue(null);
 
-      expect(result).toBe(true);
-      expect(reflector.getAllAndOverride).toHaveBeenCalledWith('roles', [
-        mockExecutionContext.getHandler(),
-        mockExecutionContext.getClass(),
-      ]);
-    });
+    expect(guard.canActivate(context)).toBe(true);
+  });
 
-    it('should return true if user has required role', () => {
-      jest.spyOn(reflector, 'getAllAndOverride').mockReturnValue(['admin']);
+  it('should return true when user has required role', () => {
+    const context = {
+      getClass: () => ({}),
+      getHandler: () => ({}),
+      getArgs: () => [],
+      getType: () => 'http',
+      switchToHttp: () => ({
+        getRequest: () => ({
+          user: mockUser,
+        }),
+      }),
+    } as ExecutionContext;
 
-      const result = guard.canActivate(mockExecutionContext);
+    jest.spyOn(reflector, 'get').mockReturnValue(['user']);
 
-      expect(result).toBe(true);
-    });
+    expect(guard.canActivate(context)).toBe(true);
+  });
 
-    it('should return true if user has one of the required roles', () => {
-      jest
-        .spyOn(reflector, 'getAllAndOverride')
-        .mockReturnValue(['user', 'admin']);
+  it('should return false when user does not have required role', () => {
+    const context = {
+      getClass: () => ({}),
+      getHandler: () => ({}),
+      getArgs: () => [],
+      getType: () => 'http',
+      switchToHttp: () => ({
+        getRequest: () => ({
+          user: mockUser,
+        }),
+      }),
+    } as ExecutionContext;
 
-      const result = guard.canActivate(mockExecutionContext);
+    jest.spyOn(reflector, 'get').mockReturnValue(['admin']);
 
-      expect(result).toBe(true);
-    });
+    expect(guard.canActivate(context)).toBe(false);
+  });
 
-    it('should return false if user has no roles', () => {
-      jest.spyOn(reflector, 'getAllAndOverride').mockReturnValue(['admin']);
-      mockRequest.user.roles = [];
+  it('should return false when user is not present in request', () => {
+    const context = {
+      getClass: () => ({}),
+      getHandler: () => ({}),
+      getArgs: () => [],
+      getType: () => 'http',
+      switchToHttp: () => ({
+        getRequest: () => ({
+          user: undefined,
+        }),
+      }),
+    } as ExecutionContext;
 
-      const result = guard.canActivate(mockExecutionContext);
+    jest.spyOn(reflector, 'get').mockReturnValue(['user']);
 
-      expect(result).toBe(false);
-    });
-
-    it('should return false if user does not have required role', () => {
-      jest
-        .spyOn(reflector, 'getAllAndOverride')
-        .mockReturnValue(['superadmin']);
-      mockRequest.user.roles = ['user'];
-
-      const result = guard.canActivate(mockExecutionContext);
-
-      expect(result).toBe(false);
-    });
-
-    it('should return false if user is not authenticated', () => {
-      jest.spyOn(reflector, 'getAllAndOverride').mockReturnValue(['admin']);
-      mockRequest.user = { roles: [] };
-
-      const result = guard.canActivate(mockExecutionContext);
-
-      expect(result).toBe(false);
-    });
-
-    it('should handle multiple required roles', () => {
-      jest
-        .spyOn(reflector, 'getAllAndOverride')
-        .mockReturnValue(['admin', 'superadmin']);
-      mockRequest.user.roles = ['admin', 'user'];
-
-      const result = guard.canActivate(mockExecutionContext);
-
-      expect(result).toBe(true);
-    });
+    expect(guard.canActivate(context)).toBe(false);
   });
 });

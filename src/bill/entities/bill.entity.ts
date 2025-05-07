@@ -5,6 +5,7 @@ import {
   ManyToOne,
   CreateDateColumn,
   UpdateDateColumn,
+  JoinColumn,
 } from 'typeorm';
 import { Invoice } from '../../invoice/entities/invoice.entity';
 
@@ -26,6 +27,7 @@ export class Bill {
   isPaid!: boolean;
 
   @ManyToOne(() => Invoice, (invoice) => invoice.bills)
+  @JoinColumn({ name: 'invoice_id' })
   invoice!: Invoice;
 
   @CreateDateColumn()

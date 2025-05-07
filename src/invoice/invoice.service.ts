@@ -37,6 +37,7 @@ export class InvoiceService {
     const savedInvoice = await this.invoiceRepository.save(invoice);
 
     const today = new Date();
+    const billValue = savedInvoice.totalValue / savedInvoice.numberOfBills;
 
     for (let i = 1; i <= savedInvoice.numberOfBills; i++) {
       const dueDate = new Date(today);
@@ -46,6 +47,7 @@ export class InvoiceService {
         invoiceId: savedInvoice.id,
         installmentNumber: i,
         dueDate,
+        value: billValue,
       });
     }
 

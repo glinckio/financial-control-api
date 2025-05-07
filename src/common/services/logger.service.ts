@@ -7,51 +7,32 @@ export class LoggerService implements NestLoggerService {
 
   constructor() {
     this.logger = createLogger({
-      format: format.combine(
-        format.timestamp(),
-        format.ms(),
-        format.errors({ stack: true }),
-        format.json(),
-      ),
+      format: format.combine(format.timestamp(), format.json()),
       transports: [
-        new transports.Console({
-          format: format.combine(
-            format.colorize(),
-            format.printf(({ timestamp, level, message, ...meta }) => {
-              return `${timestamp} [${level}]: ${message} ${
-                Object.keys(meta).length ? JSON.stringify(meta, null, 2) : ''
-              }`;
-            }),
-          ),
-        }),
-        new transports.File({
-          filename: 'logs/error.log',
-          level: 'error',
-        }),
-        new transports.File({
-          filename: 'logs/combined.log',
-        }),
+        new transports.Console(),
+        new transports.File({ filename: 'logs/error.log', level: 'error' }),
+        new transports.File({ filename: 'logs/combined.log' }),
       ],
     });
   }
 
-  log(message: string, context?: string) {
+  log(message: string, context?: string): void {
     this.logger.info(message, { context });
   }
 
-  error(message: string, trace?: string, context?: string) {
+  error(message: string, trace?: string, context?: string): void {
     this.logger.error(message, { trace, context });
   }
 
-  warn(message: string, context?: string) {
+  warn(message: string, context?: string): void {
     this.logger.warn(message, { context });
   }
 
-  debug(message: string, context?: string) {
+  debug(message: string, context?: string): void {
     this.logger.debug(message, { context });
   }
 
-  verbose(message: string, context?: string) {
+  verbose(message: string, context?: string): void {
     this.logger.verbose(message, { context });
   }
 }

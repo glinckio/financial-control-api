@@ -23,6 +23,10 @@ export class BillService {
   async create(createBillDto: CreateBillDto): Promise<Bill> {
     const invoice = await this.invoiceService.findOne(createBillDto.invoiceId);
 
+    if (!invoice) {
+      throw new BadRequestException('Invoice not found');
+    }
+
     if (createBillDto.installmentNumber > invoice.numberOfBills) {
       throw new BadRequestException(
         'Installment number exceeds total number of bills',

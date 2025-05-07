@@ -59,6 +59,7 @@ describe('InvoiceController', () => {
 
       const result = await controller.create(createInvoiceDto);
       expect(result).toEqual(mockInvoice);
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(service.create).toHaveBeenCalledWith(createInvoiceDto);
     });
   });
@@ -67,6 +68,7 @@ describe('InvoiceController', () => {
     it('should return an array of invoices', async () => {
       const result = await controller.findAll();
       expect(result).toEqual([mockInvoice]);
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(service.findAll).toHaveBeenCalled();
     });
   });
@@ -75,6 +77,7 @@ describe('InvoiceController', () => {
     it('should return a single invoice', async () => {
       const result = await controller.findOne('1');
       expect(result).toEqual(mockInvoice);
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(service.findOne).toHaveBeenCalledWith('1');
     });
   });
@@ -82,6 +85,7 @@ describe('InvoiceController', () => {
   describe('remove', () => {
     it('should remove an invoice', async () => {
       await controller.remove('1');
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(service.remove).toHaveBeenCalledWith('1');
     });
   });
