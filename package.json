@@ -1,8 +1,8 @@
 {
-  "name": "project-name",
+  "name": "financial-control-api",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "API para o controle financeiro",
+  "author": "Gabriel Linck",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
