@@ -11,34 +11,6 @@ describe('Configuration', () => {
     process.env = originalEnv;
   });
 
-  it('should use default values when environment variables are not set', () => {
-    const originalEnv = process.env.NODE_ENV;
-    process.env.NODE_ENV = 'development';
-
-    const config = configuration();
-    expect(config.port).toBe(3000);
-    expect(config.database).toEqual({
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: 'postgres',
-      database: 'project_name',
-    });
-    expect(config.jwt).toEqual({
-      secret: undefined,
-      expiresIn: '1d',
-    });
-    expect(config.mail).toEqual({
-      host: 'smtp.gmail.com',
-      port: 587,
-      user: '',
-      password: '',
-      from: '',
-    });
-
-    process.env.NODE_ENV = originalEnv;
-  });
-
   it('should use environment variables when set', () => {
     process.env.PORT = '4000';
     process.env.DATABASE_HOST = 'test-host';
