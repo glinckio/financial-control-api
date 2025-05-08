@@ -12,6 +12,9 @@ describe('Configuration', () => {
   });
 
   it('should use default values when environment variables are not set', () => {
+    const originalEnv = process.env.NODE_ENV;
+    process.env.NODE_ENV = 'development';
+
     const config = configuration();
     expect(config.port).toBe(3000);
     expect(config.database).toEqual({
@@ -32,6 +35,8 @@ describe('Configuration', () => {
       password: '',
       from: '',
     });
+
+    process.env.NODE_ENV = originalEnv;
   });
 
   it('should use environment variables when set', () => {
