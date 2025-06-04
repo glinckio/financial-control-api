@@ -1,7 +1,7 @@
 import { ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { RolesGuard } from './roles.guard';
-import { User } from '../entities/user.entity';
+import { User } from '../../database/entities/user.entity';
 
 describe('RolesGuard', () => {
   let guard: RolesGuard;
@@ -12,7 +12,6 @@ describe('RolesGuard', () => {
     email: 'test@example.com',
     password: 'password',
     name: 'Test User',
-    role: 'user',
     roles: ['user'],
     createdAt: new Date(),
     updatedAt: new Date(),

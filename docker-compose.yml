@@ -14,8 +14,19 @@ services:
       - DATABASE_USERNAME=postgres
       - DATABASE_PASSWORD=postgres
       - DATABASE_NAME=project_name
+      - JWT_SECRET=2f8c1e4b5a6d7c8e9f0b1a2d3c4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2
+      - JWT_EXPIRATION=1d
+      - mail.host=smtp.gmail.com
+      - mail.port=587
+      - mail.user=gabriel.jobc13@gmail.com
+      - mail.password=bpfl swob aeit feuw
+      - mail.from=blindpunchlee@gmail.com
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+    volumes:
+      - ./logs:/app/logs
 
   postgres:
     image: postgres:16-alpine
@@ -27,6 +38,12 @@ services:
       - POSTGRES_DB=project_name
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
 
 volumes:
   postgres_data:

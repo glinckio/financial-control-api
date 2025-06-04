@@ -14,6 +14,7 @@ export const APP_CONSTANTS = {
 
 export const ROLES = {
   ADMIN: 'admin',
+  USER: 'user',
 } as const;
 
 export const ERROR_MESSAGES = {

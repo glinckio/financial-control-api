@@ -117,6 +117,9 @@ npm run start:prod
 
 # Debug mode
 npm run start:debug
+
+# Seed database with fake data
+npm run seed
 ```
 
 ### 🐳 Docker Support
@@ -177,6 +180,7 @@ API documentation is available at `/api` when running the application. The docum
 
 - `npm run build` - Build the application
 - `npm run format` - Format code using Prettier
+- `npm run seed` - Seed the database with fake data (clears existing data first)
 - `npm run start` - Start the application
 - `npm run start:dev` - Start in development mode with hot-reload
 - `npm run start:debug` - Start in debug mode
